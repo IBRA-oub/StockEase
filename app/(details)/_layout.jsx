@@ -9,6 +9,7 @@ const _layout = () => {
             <StatusBar style="dark-content" />
             <Stack>
                 <Stack.Screen name='productDetails' options={{ headerShown: false }} />
+                <Stack.Screen name='addProduct' options={{ headerShown: false }} />
             </Stack>
 
         </>

@@ -8,10 +8,12 @@ import images from '../../constants/images';
 import ProductItem from '../../components/ProductItem';
 import CityModal from '../../components/CityModal';
 import FilterModal from '../../components/FilterModal';
+import { useRouter } from 'expo-router';
 
 
 
 const Home = () => {
+    const router = useRouter()
     const [isModalVisible, setModalVisible] = useState(false);
     const [isFilterModalVisible, setFilterModalVisible] = useState(false);
     const [filter, setFilter] = useState(null);
@@ -59,8 +61,8 @@ const Home = () => {
 
 
     const handleCreateProduct = () => {
-
-        console.log("Creating new product...");
+        router.push('/addProduct')
+        setFilterModalVisible(false);
     };
 
     return (

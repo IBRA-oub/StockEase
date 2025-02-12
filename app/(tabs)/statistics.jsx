@@ -1,15 +1,53 @@
-import { Image, StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import { Alert, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import images from '../../constants/images'
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useRouter } from 'expo-router';
 
 
 
 const Statistics = () => {
+  const [name, setName] = useState('')
+  const [secretKey, setSecretKey] = useState('')
+  const router = useRouter()
+  useEffect(() => {
+    const getData = async () => {
+      const nom = await AsyncStorage.getItem('name')
+      const secretKey = await AsyncStorage.getItem('secretKey')
+      setName(nom)
+      setSecretKey(secretKey)
+    }
+    getData()
+  }, [AsyncStorage])
+
+  const handleLogout = () => {
+    Alert.alert(
+      "Logout",
+      "Are you sure you want to log out?",
+      [
+        {
+          text: "Cancel",
+          style: "cancel"
+        },
+        {
+          text: "OK",
+          onPress: async () => {
+            try {
+              await AsyncStorage.clear();
+              router.replace('/');
+            } catch (error) {
+              console.error("Error during logout:", error);
+            }
+          }
+        }
+      ]
+    );
+  };
   return (
     <SafeAreaView style={styles.container}>
 
@@ -19,15 +57,15 @@ const Statistics = () => {
           style={{ width: '20%', height: '45%', overflow: 'hidden', borderRadius: 50 }}
         />
         <View style={{ marginLeft: 10 }}>
-          <Text style={{ fontSize: 18, fontWeight: '500' }}>Amine Boutaleb</Text>
+          <Text style={{ fontSize: 18, fontWeight: '500' }}>{name}</Text>
           <View style={{ flexDirection: 'row', paddingTop: 4 }}>
             <Text style={{ fontSize: 15 }}>secretKey : </Text>
-            <Text style={{ color: 'gray' }}> AH90907J</Text>
+            <Text style={{ color: 'gray' }}> {secretKey}</Text>
           </View>
         </View>
-        <View style={{ marginLeft: 50 }}>
+        <TouchableOpacity onPress={handleLogout} style={{ marginLeft: 50 }}>
           <MaterialCommunityIcons name="logout" size={34} color="red" />
-        </View>
+        </TouchableOpacity>
 
       </View>
 
@@ -87,7 +125,7 @@ const Statistics = () => {
             added/removed
           </Text>
           <Text style={{ fontSize: 25, fontWeight: 'bold' }}>
-            144 
+            144
           </Text>
         </View>
       </View>
@@ -106,6 +144,6 @@ const styles = StyleSheet.create({
     height: '100%',
     backgroundColor: '#292929',
     alignItems: 'center',
-    justifyContent:'center'
+    justifyContent: 'center'
   },
 })

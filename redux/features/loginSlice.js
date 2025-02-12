@@ -21,6 +21,7 @@ export const login = createAsyncThunk('auth/login', async (secretKey, { rejectWi
 
             await AsyncStorage.setItem('id' , warehouseman.id)
             await AsyncStorage.setItem('name' , warehouseman.name)
+            await AsyncStorage.setItem('city' , warehouseman.city)
             await AsyncStorage.setItem('secretKey' , warehouseman.secretKey)
 
             return warehouseman

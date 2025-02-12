@@ -6,9 +6,10 @@ import { StatusBar } from 'expo-status-bar'
 const _layout = () => {
     return (
         <>
-            <StatusBar backgroundColor="#161622" barStyle="dark-content" />
+            <StatusBar style="dark-content" />
             <Stack>
-                <Stack.Screen name='ProductDetails' options={{ headerShown: false }} />
+                <Stack.Screen name='productDetails' options={{ headerShown: false }} />
+                <Stack.Screen name='addProduct' options={{ headerShown: false }} />
             </Stack>
 
         </>

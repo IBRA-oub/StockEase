@@ -7,11 +7,16 @@ import EvilIcons from '@expo/vector-icons/EvilIcons';
 import images from '../../constants/images';
 import ProductItem from '../../components/ProductItem';
 import CityModal from '../../components/CityModal';
+import FilterModal from '../../components/FilterModal';
+import { useRouter } from 'expo-router';
 
 
 
 const Home = () => {
+    const router = useRouter()
     const [isModalVisible, setModalVisible] = useState(false);
+    const [isFilterModalVisible, setFilterModalVisible] = useState(false);
+    const [filter, setFilter] = useState(null);
     const [selectedCity, setSelectedCity] = useState('Marrakesh');
     const cities = [
         'Casablanca',
@@ -40,20 +45,41 @@ const Home = () => {
         { id: 3, titre: 'Laptop HP Pavilion', price: '230', quantity: '8', image: images.warehouse },
     ]
 
+    const handleFilterChange = (filterType) => {
+        setFilter(filterType);
+        setFilterModalVisible(false);
+    };
+
+    const filteredData = [...data];
+    if (filter === 'A-Z') {
+        filteredData.sort((a, b) => a.titre.localeCompare(b.titre));
+    } else if (filter === 'quantity') {
+        filteredData.sort((a, b) => a.quantity - b.quantity);
+    } else if (filter === 'price') {
+        filteredData.sort((a, b) => a.price - b.price);
+    }
+
+
+    const handleCreateProduct = () => {
+        router.push('/addProduct')
+        setFilterModalVisible(false);
+    };
+
     return (
         <SafeAreaView style={styles.container}>
             <View>
                 <View style={styles.navbar}>
                     <Text style={{ fontSize: 17, width: '100%', paddingLeft: 25, paddingTop: 25, color: 'gray' }}>Location</Text>
-                    <TouchableOpacity onPress={() => setModalVisible(true)} style={{ flexDirection: 'row', alignItems: 'center', width: '37%', height: 44 }}>
+                    <TouchableOpacity onPress={() => setModalVisible(true)} style={{ flexDirection: 'row', alignItems: 'center', width: '50%', height: 44 }}>
                         <Text style={{ fontSize: 17, width: '100%', paddingLeft: 25, color: 'white' }}>{selectedCity} , MA</Text>
                         <AntDesign name="down" size={20} color="white" />
                     </TouchableOpacity>
+
                     <CityModal
                         isVisible={isModalVisible}
-                        onClose={() => setModalVisible(false)} // Fermer le modal
+                        onClose={() => setModalVisible(false)}
                         cities={cities}
-                        onSelectCity={handleSelectCity} // Passer la fonction pour la sélection de la ville
+                        onSelectCity={handleSelectCity}
                     />
 
                     <View style={{ width: '100%', height: 70, marginTop: 10, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around' }}>
@@ -64,15 +90,22 @@ const Home = () => {
                                 style={{ width: '85%', height: '100%', color: 'white' }}
                             />
                         </View>
-                        <View style={{ width: '18%', height: 60, backgroundColor: '#C67C4E', justifyContent: 'center', alignItems: 'center', overflow: 'hidden', borderRadius: 13 }}>
+                        <TouchableOpacity onPress={() => setFilterModalVisible(true)} style={{ width: '18%', height: 60, backgroundColor: '#C67C4E', justifyContent: 'center', alignItems: 'center', overflow: 'hidden', borderRadius: 13 }}>
                             <Ionicons name="options" size={40} color="white" />
-                        </View>
+                        </TouchableOpacity>
                     </View>
+
+                    <FilterModal
+                        isVisible={isFilterModalVisible}
+                        onClose={() => setFilterModalVisible(false)}
+                        onCreateProduct={handleCreateProduct}
+                        onFilterChange={handleFilterChange}
+                    />
 
                 </View>
                 <View style={{ position: 'absolute', top: 190, left: 20, zIndex: 10, height: 160, width: '90%', backgroundColor: '#C67C4E', borderRadius: 20, shadowColor: '#313131', shadowOffset: { width: 4, height: 4 }, shadowOpacity: 0.2 }}>
                     <View style={{ width: '100%', height: '100%', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-                        <Text style={{ color: 'white', fontSize: 35, width: '60%', fontWeight: 'bold', position: 'relative', left: 30, textShadowColor: 'rgba(0, 0, 0, 0.75)', textShadowOffset: { width: 2, height: 2 }, textShadowRadius: 5 }}>
+                        <Text style={{ color: 'white', fontSize: 33, width: '60%', fontWeight: 'bold', position: 'relative', left: 30, textShadowColor: 'rgba(0, 0, 0, 0.75)', textShadowOffset: { width: 2, height: 2 }, textShadowRadius: 5 }}>
                             Optimize your Stock Management
                         </Text>
                         <Image
@@ -86,7 +119,7 @@ const Home = () => {
                 </View>
             </View>
             <FlatList
-                data={data}
+                data={filteredData}
                 renderItem={({ item }) => <ProductItem item={item} />}
                 keyExtractor={(item) => item.id}
                 numColumns={2}

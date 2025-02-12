@@ -4,6 +4,7 @@ import Octicons from '@expo/vector-icons/Octicons';
 import Entypo from '@expo/vector-icons/Entypo';
 import { Tabs } from 'expo-router';
 
+
 const TabsLayout = () => {
     return (
         <>

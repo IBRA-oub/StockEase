@@ -18,7 +18,8 @@ const signIn = () => {
         try {
             const response = await dispatch(login(secretKey))
             if (response.meta.requestStatus === 'fulfilled') {
-                router.push('/home')
+                const city = response.payload.city
+                router.push(`/home?city=${city}`)
             } else {
                 setError(true)
             }
@@ -67,7 +68,7 @@ const signIn = () => {
 
                     </View>
                     {error &&
-                        <Text style={{color:'red' , textAlign:'left',width:'95%'}}>
+                        <Text style={{ color: 'red', textAlign: 'left', width: '95%' }}>
                             Invalid secretKey
                         </Text>
                     }

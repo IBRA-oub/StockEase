@@ -1,7 +1,24 @@
 import React from 'react';
 import { Modal, View, Text, TouchableOpacity, ScrollView } from 'react-native';
 
-const CityModal = ({ isVisible, onClose, cities, onSelectCity }) => {
+const CityModal = ({ isVisible, onClose, onSelectCity }) => {
+  const cities = [
+    'Casablanca',
+    'Rabat',
+    'Fès',
+    'Marrakesh',
+    'Tangier',
+    'Agadir',
+    'Oujda',
+    'Tetouan',
+    'Essaouira',
+    'Meknes',
+    'Safi',
+    'Kenitra',
+    'Beni Mellal',
+    'Nador',
+    'Ifrane',
+];
   return (
     <Modal visible={isVisible} animationType="slide" transparent={true} onRequestClose={onClose}>
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#1d1d1dd1' }}>

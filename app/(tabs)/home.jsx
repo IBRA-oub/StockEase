@@ -70,7 +70,7 @@ const Home = () => {
             <View>
                 <View style={styles.navbar}>
                     <Text style={{ fontSize: 17, width: '100%', paddingLeft: 25, paddingTop: 25, color: 'gray' }}>Location</Text>
-                    <TouchableOpacity onPress={() => setModalVisible(true)} style={{ flexDirection: 'row', alignItems: 'center', width: '37%', height: 44 }}>
+                    <TouchableOpacity onPress={() => setModalVisible(true)} style={{ flexDirection: 'row', alignItems: 'center', width: '50%', height: 44 }}>
                         <Text style={{ fontSize: 17, width: '100%', paddingLeft: 25, color: 'white' }}>{selectedCity} , MA</Text>
                         <AntDesign name="down" size={20} color="white" />
                     </TouchableOpacity>
@@ -105,7 +105,7 @@ const Home = () => {
                 </View>
                 <View style={{ position: 'absolute', top: 190, left: 20, zIndex: 10, height: 160, width: '90%', backgroundColor: '#C67C4E', borderRadius: 20, shadowColor: '#313131', shadowOffset: { width: 4, height: 4 }, shadowOpacity: 0.2 }}>
                     <View style={{ width: '100%', height: '100%', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-                        <Text style={{ color: 'white', fontSize: 35, width: '60%', fontWeight: 'bold', position: 'relative', left: 30, textShadowColor: 'rgba(0, 0, 0, 0.75)', textShadowOffset: { width: 2, height: 2 }, textShadowRadius: 5 }}>
+                        <Text style={{ color: 'white', fontSize: 33, width: '60%', fontWeight: 'bold', position: 'relative', left: 30, textShadowColor: 'rgba(0, 0, 0, 0.75)', textShadowOffset: { width: 2, height: 2 }, textShadowRadius: 5 }}>
                             Optimize your Stock Management
                         </Text>
                         <Image

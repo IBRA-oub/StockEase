@@ -1,11 +1,32 @@
 import { Image, ImageBackground, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
-import React from 'react'
+import React, { useState } from 'react'
 import { useRouter } from 'expo-router'
 import images from '../../constants/images'
 import { StatusBar } from 'expo-status-bar'
+import { useDispatch } from 'react-redux'
+import { login } from '../../redux/features/loginSlice'
 
 const signIn = () => {
     const router = useRouter()
+    const [secretKey, setSecretKey] = useState('')
+    const [error, setError] = useState(false)
+
+    const dispatch = useDispatch()
+
+    const handleSubmit = async (e) => {
+        e.preventDefault()
+        try {
+            const response = await dispatch(login(secretKey))
+            if (response.meta.requestStatus === 'fulfilled') {
+                router.push('/home')
+            } else {
+                setError(true)
+            }
+        } catch (error) {
+            console.log(error)
+        }
+
+    }
     return (
         <View style={{ flex: 1, backgroundColor: 'black' }}>
             <StatusBar translucent backgroundColor="transparent" />
@@ -19,20 +40,22 @@ const signIn = () => {
                     <Text style={{ color: '#313131', fontSize: 17, fontWeight: 500, textAlign: 'center', width: '90%', marginTop: 3 }}>
                         Log in to your account
                     </Text>
-                    <View style={{ width: '97%', height: 70, backgroundColor: 'white', marginTop: 10, flexDirection: 'row', overflow: 'hidden', borderRadius: 20, alignItems: 'center',borderWidth:1,borderColor:'#C67C4E' }}>
+                    <View style={[{ width: '97%', height: 70, backgroundColor: 'white', marginTop: 10, flexDirection: 'row', overflow: 'hidden', borderRadius: 20, alignItems: 'center', borderWidth: 1, borderColor: '#C67C4E' }, error && { borderColor: 'red' }]}>
                         <Image
                             resizeMode='contain'
                             source={images.profile}
                             style={{ height: '40%', width: '10%' }}
                         />
                         <TextInput
-                        placeholder='1234575784'
-                        placeholderTextColor={'#E3E3E3'}
-                            style={{ height: '100%', width: '70%', backgroundColor: 'white' , paddingLeft:3, color:'#C67C4E' }}
+                            value={secretKey}
+                            onChangeText={(e) => setSecretKey({ ...secretKey, secretKey: e })}
+                            placeholder='1234575784'
+                            placeholderTextColor={'#E3E3E3'}
+                            style={{ height: '100%', width: '70%', backgroundColor: 'white', paddingLeft: 3, color: '#C67C4E' }}
                         />
                         <TouchableOpacity
-                        onPress={() => router.push('/home')}
-                            style={{ height: '100%', width: '20%', backgroundColor: '#F9F2ED',justifyContent:'center',borderRadius:20 }}
+                            onPress={handleSubmit}
+                            style={{ height: '100%', width: '20%', backgroundColor: '#F9F2ED', justifyContent: 'center', borderRadius: 20 }}
                         >
                             <Image
                                 resizeMode='contain'
@@ -43,6 +66,11 @@ const signIn = () => {
                         </TouchableOpacity>
 
                     </View>
+                    {error &&
+                        <Text style={{color:'red' , textAlign:'left',width:'95%'}}>
+                            Invalid secretKey
+                        </Text>
+                    }
                 </View>
             </ImageBackground>
         </View>

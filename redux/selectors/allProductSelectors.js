@@ -1,0 +1,1 @@
+export const allProductSelector = ({allProduct})=> allProduct.products

@@ -1,67 +1,59 @@
-import { ScrollView, TextInput, StyleSheet, Text, TouchableOpacity, View, Image, FlatList, ImageBackground } from 'react-native'
-import React, { useState } from 'react'
-import { SafeAreaView } from 'react-native-safe-area-context'
+import React, { useEffect, useState } from 'react';
+import { SafeAreaView, TextInput, StyleSheet, Text, TouchableOpacity, View, FlatList, Image } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import AntDesign from '@expo/vector-icons/AntDesign';
-import Ionicons from '@expo/vector-icons/Ionicons';
 import EvilIcons from '@expo/vector-icons/EvilIcons';
+import Ionicons from '@expo/vector-icons/Ionicons';
 import images from '../../constants/images';
 import ProductItem from '../../components/ProductItem';
 import CityModal from '../../components/CityModal';
 import FilterModal from '../../components/FilterModal';
-import { useRouter } from 'expo-router';
-
-
+import { allProduct } from '../../redux/features/allProductSlice';
+import { allProductSelector } from '../../redux/selectors/allProductSelectors';
+import { filterAndSortProducts } from '../../utils/filter';
 
 const Home = () => {
-    const router = useRouter()
+    // get city from params 
+    const params = useLocalSearchParams();
+    const city = params.city
+   
     const [isModalVisible, setModalVisible] = useState(false);
     const [isFilterModalVisible, setFilterModalVisible] = useState(false);
     const [filter, setFilter] = useState(null);
-    const [selectedCity, setSelectedCity] = useState('Marrakesh');
-    const cities = [
-        'Casablanca',
-        'Rabat',
-        'Fès',
-        'Marrakech',
-        'Tangier',
-        'Agadir',
-        'Oujda',
-        'Tetouan',
-        'Essaouira',
-        'Meknes',
-        'Safi',
-        'Kenitra',
-        'Beni Mellal',
-        'Nador',
-        'Ifrane',
-    ];
+    const [selectedCity, setSelectedCity] = useState(city);
+    const [searchTerm, setSearchTerm] = useState("");
+
+    // dispatch data
+
+    const dispatch = useDispatch();
+    const dispatchAllProduct = useSelector(allProductSelector);
+
+    const router = useRouter();
+
+    useEffect(() => {
+        dispatch(allProduct());
+    }, [dispatch]);
+
     const handleSelectCity = (city) => {
         setSelectedCity(city);
         setModalVisible(false);
     };
-    const data = [
-        { id: 1, titre: 'Clavier Mécanique Logitech', price: '220', quantity: '20', image: images.warehouse },
-        { id: 2, titre: 'Laptop HP Pavilion', price: '230', quantity: '10', image: images.warehouse },
-        { id: 3, titre: 'Laptop HP Pavilion', price: '230', quantity: '8', image: images.warehouse },
-    ]
 
     const handleFilterChange = (filterType) => {
         setFilter(filterType);
         setFilterModalVisible(false);
     };
 
-    const filteredData = [...data];
-    if (filter === 'A-Z') {
-        filteredData.sort((a, b) => a.titre.localeCompare(b.titre));
-    } else if (filter === 'quantity') {
-        filteredData.sort((a, b) => a.quantity - b.quantity);
-    } else if (filter === 'price') {
-        filteredData.sort((a, b) => a.price - b.price);
-    }
-
+    // filter
+    const filteredData = filterAndSortProducts(dispatchAllProduct, {
+        selectedCity,
+        filter,
+        searchTerm,
+    });
 
     const handleCreateProduct = () => {
-        router.push('/addProduct')
+        router.push('/addProduct');
         setFilterModalVisible(false);
     };
 
@@ -78,7 +70,6 @@ const Home = () => {
                     <CityModal
                         isVisible={isModalVisible}
                         onClose={() => setModalVisible(false)}
-                        cities={cities}
                         onSelectCity={handleSelectCity}
                     />
 
@@ -86,6 +77,8 @@ const Home = () => {
                         <View style={{ flexDirection: 'row', width: '70%', height: 60, backgroundColor: '#313131', justifyContent: 'center', alignItems: 'center', overflow: 'hidden', borderRadius: 13 }}>
                             <EvilIcons name="search" size={47} color="white" />
                             <TextInput
+                                value={searchTerm}
+                                onChangeText={(text) => setSearchTerm(text)}
                                 placeholder='Search...'
                                 style={{ width: '85%', height: '100%', color: 'white' }}
                             />
@@ -101,8 +94,8 @@ const Home = () => {
                         onCreateProduct={handleCreateProduct}
                         onFilterChange={handleFilterChange}
                     />
-
                 </View>
+
                 <View style={{ position: 'absolute', top: 190, left: 20, zIndex: 10, height: 160, width: '90%', backgroundColor: '#C67C4E', borderRadius: 20, shadowColor: '#313131', shadowOffset: { width: 4, height: 4 }, shadowOpacity: 0.2 }}>
                     <View style={{ width: '100%', height: '100%', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
                         <Text style={{ color: 'white', fontSize: 33, width: '60%', fontWeight: 'bold', position: 'relative', left: 30, textShadowColor: 'rgba(0, 0, 0, 0.75)', textShadowOffset: { width: 2, height: 2 }, textShadowRadius: 5 }}>
@@ -114,10 +107,16 @@ const Home = () => {
                         />
                     </View>
                 </View>
-                <View style={{ width: '100%', height: 90, backgroundColor: 'white' }}>
 
-                </View>
+                <View style={{ width: '100%', height: 90, backgroundColor: 'white' }}></View>
             </View>
+
+            {filteredData.length === 0 && (
+                <Text style={{ textAlign: 'center', fontSize: 19, backgroundColor: 'white' }}>
+                    No items available
+                </Text>
+            )}
+
             <FlatList
                 data={filteredData}
                 renderItem={({ item }) => <ProductItem item={item} />}
@@ -127,10 +126,10 @@ const Home = () => {
                 showsHorizontalScrollIndicator={false}
             />
         </SafeAreaView>
-    )
-}
+    );
+};
 
-export default Home
+export default Home;
 
 const styles = StyleSheet.create({
     container: {
@@ -148,4 +147,4 @@ const styles = StyleSheet.create({
         height: 250,
         backgroundColor: '#F9F2ED',
     },
-})
+});

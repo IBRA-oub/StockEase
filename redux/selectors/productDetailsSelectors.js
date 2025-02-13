@@ -1,0 +1,1 @@
+export const productDetailsSelector = ({productDetails})=> productDetails.productDetails

@@ -1,21 +1,45 @@
 import { Alert, Image, Modal, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import AntDesign from '@expo/vector-icons/AntDesign';
 import images from '../../constants/images';
-import Entypo from '@expo/vector-icons/Entypo';
-import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { useRouter } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
+import { useDispatch, useSelector } from 'react-redux';
+import { productDetailsSelector } from '../../redux/selectors/productDetailsSelectors';
+import { productDetails } from '../../redux/features/productDetailsSlice';
+import { warehousemans } from '../../redux/features/warehousemansSlice';
+import { warehousemansSelector } from '../../redux/selectors/warehousemansSelectors';
+import Line from '../../components/line';
+import ProductImage from '../../components/DetailsProduct/ProductImage';
+import LocationInfo from '../../components/DetailsProduct/LocationInfo';
+import TextDetail from '../../components/DetailsProduct/TextDetail';
+import Cards from '../../components/DetailsProduct/Cards';
+import WarehousemansEdit from '../../components/DetailsProduct/warehousemansEdit';
+import UpdateModal from '../../components/DetailsProduct/UpdateModal';
+import useProductAndWarehouseData from '../../hooks/useProductAndWarehouseData ';
+
+
 
 const ProductDetails = () => {
-  const [editeQuantity, setEditeQuentity] = useState(false)
-  const [quantity, setquantity] = useState('')
+
+  // get city from params 
+  const params = useLocalSearchParams();
+  const id = params.id;
+  const productCity = params.productCity;
+  const productStockName = params.productStockName;
+  const productQuantity = params.productQuantity;
+
+  //  dispatch data  hook
+const {productDeltails,warehousemansInfo} = useProductAndWarehouseData(id)
+
+  const [editeQuantity, setEditeQuantity] = useState(false);
+  const [quantity, setQuantity] = useState('');
   const router = useRouter()
 
   // update function
   const handleSubmit = async (e) => {
-    setEditeQuentity(false)
+    setEditeQuantity(false)
     console.log(quantity)
     e.preventDefault()
   }
@@ -35,7 +59,7 @@ const ProductDetails = () => {
           text: "Confirm",
           onPress: () => {
             console.log("Product deleted");
-            
+
           }
         }
       ]
@@ -50,95 +74,32 @@ const ProductDetails = () => {
         <Text style={{ width: '70%', textAlign: 'center', fontSize: 20, fontWeight: 'bold' }}>Detail</Text>
       </View>
       <ScrollView style={{ flex: 1, backgroundColor: 'white' }}>
-        <View style={{ width: '100%', height: 250, justifyContent: 'center', alignItems: 'center' }}>
 
-          <Image
-            style={{ width: '95%', height: '90%', overflow: 'hidden', borderRadius: 20 }}
-            source={images.warehouse}
-          />
-        </View>
-        <View style={{ width: '100%', height: 45, flexDirection: 'row', alignItems: 'center', paddingLeft: '10' }}>
-          <Entypo name="location-pin" size={34} color="#C67C4E" />
-          <Text style={{ fontSize: 16, fontWeight: '600' }}>Marrakesh  , Gueliz B2</Text>
-        </View>
-        <View style={{ width: '100%', height: 35, flexDirection: 'row', alignItems: 'center', paddingLeft: '30' }}>
-          <Text style={{ fontSize: 16, fontWeight: '600' }}>Laptop HP Pavilion </Text>
-          <Text style={{ fontSize: 16, color: 'gray' }}> ( Informatique )</Text>
-        </View>
-        <View style={{ width: '100%', height: 15, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-          <View style={{ width: '93%', height: 2, borderBottomWidth: 1, borderColor: '#E3E3E3' }}>
-          </View>
-        </View>
+        <ProductImage imageSource={images.warehouse} />
+
+        <LocationInfo productCity={productCity} productStockName={productStockName} productDeltailsName={productDeltails?.name} productDeltailsType={productDeltails?.type} />
+
+        <Line />
 
         <View style={{ width: '100%', height: 150, flexDirection: 'row', alignItems: 'center', paddingLeft: 10 }}>
-          <View style={{ width: '30%', height: 120, backgroundColor: '#F9F2ED', overflow: 'hidden', borderRadius: 20 }}>
-            <View style={{ width: '100%', height: 40, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-              <Entypo name="price-tag" size={24} color="#C67C4E" />
-              <Text style={{ fontSize: 17, fontWeight: '600' }}>Price</Text>
-            </View>
-            <View style={{ height: 80, width: '100%', justifyContent: 'center', alignItems: 'center' }}>
-              <Text style={{ fontSize: 18, fontWeight: '600', color: '#313131' }}>
-                230 DH
-              </Text>
-
-            </View>
-          </View>
-          <View style={{ width: '30%', height: 120, backgroundColor: '#F9F2ED', overflow: 'hidden', borderRadius: 20, marginLeft: 15 }}>
-            <View style={{ width: '100%', height: 40, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-              <AntDesign name="arrowdown" size={24} color="#C67C4E" />
-              <Text style={{ fontSize: 17, fontWeight: '600' }}>Solde</Text>
-            </View>
-            <View style={{ height: 80, width: '100%', justifyContent: 'center', alignItems: 'center' }}>
-              <Text style={{ fontSize: 18, fontWeight: '600', color: '#313131' }}>
-                200 DH
-              </Text>
-
-            </View>
-          </View>
-          <View style={{ width: '30%', height: 120, backgroundColor: '#F9F2ED', overflow: 'hidden', borderRadius: 20, marginLeft: 15 }}>
-            <View style={{ width: '100%', height: 40, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-              <MaterialIcons name="production-quantity-limits" size={24} color="#C67C4E" />
-              <Text style={{ fontSize: 17, fontWeight: '600' }}>Quantity</Text>
-            </View>
-            <View style={{ height: 80, width: '100%', justifyContent: 'center', alignItems: 'center' }}>
-              <Text style={{ fontSize: 18, fontWeight: '600', color: '#313131' }}>
-                11200
-              </Text>
-
-            </View>
-          </View>
+          <Cards productDeltailsPrice={productDeltails?.price} productDeltailsSolde={productDeltails?.solde} productQuantity={productQuantity} />
         </View>
 
-        <View style={{ width: '100%', height: 35, flexDirection: 'row', alignItems: 'center', paddingLeft: '30' }}>
-          <Text style={{ fontSize: 16, fontWeight: '600' }}>Barcode :  </Text>
-          <Text style={{ fontSize: 16, color: 'gray' }}> 1234567890123</Text>
-        </View>
-        <View style={{ width: '100%', height: 35, flexDirection: 'row', alignItems: 'center', paddingLeft: '30' }}>
-          <Text style={{ fontSize: 16, fontWeight: '600' }}>Supplier :  </Text>
-          <Text style={{ fontSize: 16, color: 'gray' }}> HP</Text>
-        </View>
+        <TextDetail titre={'Barcode'} description={productDeltails?.barcode} />
+        <TextDetail titre={'Supplier'} description={productDeltails?.supplier} />
 
-        <View style={{ width: '100%', height: 15, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-          <View style={{ width: '93%', height: 2, borderBottomWidth: 1, borderColor: '#E3E3E3' }}>
-          </View>
-        </View>
+        <Line />
 
-        <View style={{ width: '100%', height: 35, flexDirection: 'row', alignItems: 'center', paddingLeft: '30' }}>
-          <Text style={{ fontSize: 16, fontWeight: '600' }}>Edite By :  </Text>
-          <Text style={{ fontSize: 16, color: 'gray' }}>Amine Boutaleb at 2025-02-02</Text>
-        </View>
+        <WarehousemansEdit warehousemansInfo={warehousemansInfo} />
 
-        <View style={{ width: '100%', height: 15, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-          <View style={{ width: '93%', height: 2, borderBottomWidth: 1, borderColor: '#E3E3E3' }}>
-          </View>
-        </View>
+        <Line />
 
         <View style={{ width: '100%', height: 75, flexDirection: 'row', alignItems: 'center', paddingLeft: 10, marginTop: 10 }}>
           <TouchableOpacity onPress={handleDelete} style={{ width: '30%', height: '80%', overflow: 'hidden', borderRadius: 10, justifyContent: 'center', alignItems: 'center', borderWidth: 1, borderColor: '#E3E3E3' }}>
             <FontAwesome name="trash" size={34} color="#C67C4E" />
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={() => setEditeQuentity(true)} style={{ width: '65%', height: '80%', backgroundColor: '#C67C4E', overflow: 'hidden', borderRadius: 10, justifyContent: 'center', alignItems: 'center', marginLeft: 10 }}>
+          <TouchableOpacity onPress={() => setEditeQuantity(true)} style={{ width: '65%', height: '80%', backgroundColor: '#C67C4E', overflow: 'hidden', borderRadius: 10, justifyContent: 'center', alignItems: 'center', marginLeft: 10 }}>
             <Text style={{ fontSize: 27, fontWeight: 'bold', color: 'white' }}>
               Update
             </Text>
@@ -146,31 +107,13 @@ const ProductDetails = () => {
         </View>
 
         {/* update modal */}
-        <Modal visible={editeQuantity} animationType='slide' transparent={true} onRequestClose={''}>
-          <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#1d1d1dd1' }}>
-            <View style={{ width: '80%', backgroundColor: 'white', borderRadius: 10, padding: 20 }}>
-              <Text style={{ fontSize: 20, fontWeight: 'bold', marginBottom: 20, textAlign: 'center' }}>
-                Update Quantity
-              </Text>
-              <View style={{ width: '95%', marginBottom: 20 }}>
-                <Text style={{ fontSize: 16, fontWeight: '600', marginBottom: 5, color: '#C67C4E' }}>Quantity</Text>
-                <TextInput
-                  style={{ height: 50, borderColor: '#C67C4E', borderWidth: 1, borderRadius: 7, paddingLeft: 10, fontSize: 15, }}
-                  placeholder={'22222'}
-                  placeholderTextColor={'gray'}
-                  keyboardType="numeric"
-                  value={quantity}
-                  onChangeText={(e) => setquantity({ ...quantity, quantity: e })}
-                />
-              </View>
-              <TouchableOpacity onPress={handleSubmit} style={{ width: '95%', height: 55, backgroundColor: '#C67C4E', justifyContent: 'center', alignItems: 'center', overflow: 'hidden', borderRadius: 10 }}>
-                <Text style={{ color: 'white', fontSize: 18, fontWeight: '700' }}>
-                  Submit
-                </Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </Modal>
+        <UpdateModal
+          visible={editeQuantity}
+          onClose={() => setEditeQuantity(false)}
+          quantity={quantity}
+          setQuantity={setQuantity}
+          onSubmit={handleSubmit}
+        />
 
       </ScrollView>
     </SafeAreaView>

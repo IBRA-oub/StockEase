@@ -18,7 +18,8 @@ export default function ProductItem({ item }) {
     const router = useRouter()
     return (
         <View style={[styles.item, { width: '47%' }]}>
-            <TouchableOpacity onPress={() => router.push('/productDetails')} style={{ margin: 5, borderRadius: 8, overflow: 'hidden', height: 250 }}>
+            <TouchableOpacity onPress={() => router.push({ pathname: '/productDetails', params: { id: item.id, productCity: item.stocks[0].localisation.city, productStockName: item.stocks[0].name, productQuantity: item.stocks[0].quantity } })}
+                style={{ margin: 5, borderRadius: 8, overflow: 'hidden', height: 250 }}>
                 <Image source={{ uri: item?.image }} style={{ width: '100%', height: '60%', resizeMode: 'cover', borderRadius: 10 }} />
                 <Text style={{ fontWeight: 'bold', color: 'black', fontSize: 15, paddingTop: 5, paddingLeft: 3 }}>
                     {item?.name?.length > 10
@@ -34,7 +35,7 @@ export default function ProductItem({ item }) {
                         <Text style={{ fontSize: 18, fontWeight: 'bold', paddingLeft: 10 }}>
                             {stockQuantity}  <Text style={{ fontSize: 12, fontWeight: '400', color: 'gray' }}>item</Text>
                         </Text>
-                        <View style={{ width: '25%', height: '100%', backgroundColor:stockBackgroundColor, borderRadius: 9, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                        <View style={{ width: '25%', height: '100%', backgroundColor: stockBackgroundColor, borderRadius: 9, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
                             <Feather name="info" size={35} color="white" />
                         </View>
                     </View>

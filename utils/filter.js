@@ -1,7 +1,7 @@
 // utils.js
 export const filterAndSortProducts = (products, { selectedCity, filter, searchTerm }) => {
     const mappedData = products.map(product => {
-        if (selectedCity && product.stocks) {
+        if (selectedCity && selectedCity !== 'All'&& product.stocks) {
             const cityStocks = product.stocks.filter(stock => stock?.localisation?.city === selectedCity);
             if (cityStocks.length > 0) {
                 return {
@@ -9,8 +9,9 @@ export const filterAndSortProducts = (products, { selectedCity, filter, searchTe
                     stocks: cityStocks
                 };
             }
+            return null;
         }
-        return null;
+        return product;
     });
 
     let filteredData = mappedData.filter(product => product !== null);

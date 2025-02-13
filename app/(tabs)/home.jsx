@@ -17,11 +17,11 @@ const Home = () => {
     // get city from params 
     const params = useLocalSearchParams();
     const city = params.city
-   
+
     const [isModalVisible, setModalVisible] = useState(false);
     const [isFilterModalVisible, setFilterModalVisible] = useState(false);
     const [filter, setFilter] = useState(null);
-    const [selectedCity, setSelectedCity] = useState(city);
+    const [selectedCity, setSelectedCity] = useState(city || "All");
     const [searchTerm, setSearchTerm] = useState("");
 
     // dispatch data
@@ -109,6 +109,7 @@ const Home = () => {
                 </View>
 
                 <View style={{ width: '100%', height: 90, backgroundColor: 'white' }}></View>
+
             </View>
 
             {filteredData.length === 0 && (
@@ -133,7 +134,7 @@ export default Home;
 
 const styles = StyleSheet.create({
     container: {
-        height: 871,
+        height: 841,
         backgroundColor: '#292929'
     },
     navbar: {

@@ -3,6 +3,7 @@ import { Modal, View, Text, TouchableOpacity, ScrollView } from 'react-native';
 
 const CityModal = ({ isVisible, onClose, onSelectCity }) => {
   const cities = [
+    'All',
     'Casablanca',
     'Rabat',
     'Fès',

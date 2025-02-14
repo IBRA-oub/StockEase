@@ -1,0 +1,1 @@
+export const warehousemansSelector = ({allWarehousemans})=> allWarehousemans.warehousemans

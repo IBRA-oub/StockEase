@@ -5,7 +5,7 @@ import { useEffect } from "react"
 import { productDetailsSelector } from "../redux/selectors/productDetailsSelectors"
 import { warehousemansSelector } from "../redux/selectors/warehousemansSelectors"
 
-const useProductAndWarehouseData = (id) => {
+const   useProductAndWarehouseData = (id,productCity) => {
 
     //  dispatch data 
     const dispatch = useDispatch()
@@ -27,7 +27,9 @@ const useProductAndWarehouseData = (id) => {
         };
     })
 
-    return { productDeltails, warehousemansInfo };
+    const stockForCity = productDeltails?.stocks?.find(stock => stock?.localisation?.city === productCity);
+
+    return { productDeltails, warehousemansInfo,stockForCity };
 }
 
 export default useProductAndWarehouseData;

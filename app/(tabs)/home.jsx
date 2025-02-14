@@ -23,6 +23,7 @@ const Home = () => {
     const [filter, setFilter] = useState(null);
     const [selectedCity, setSelectedCity] = useState(city || "All");
     const [searchTerm, setSearchTerm] = useState("");
+    
 
     // dispatch data
 

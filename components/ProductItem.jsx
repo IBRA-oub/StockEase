@@ -15,10 +15,15 @@ export default function ProductItem({ item }) {
     } else {
         stockBackgroundColor = '#C67C4E';
     }
+
+    const productCity = item?.stocks?.[0]?.localisation?.city || ''; 
+    const productStockName = item?.stocks?.[0]?.name || ''; 
+    const productQuantity = item?.stocks?.[0]?.quantity || '';
+    
     const router = useRouter()
     return (
         <View style={[styles.item, { width: '47%' }]}>
-            <TouchableOpacity onPress={() => router.push({ pathname: '/productDetails', params: { id: item.id, productCity: item.stocks[0].localisation.city, productStockName: item.stocks[0].name, productQuantity: item.stocks[0].quantity } })}
+            <TouchableOpacity onPress={() => router.push({ pathname: '/productDetails', params: { id: item?.id, productCity, productStockName, productQuantity } })}
                 style={{ margin: 5, borderRadius: 8, overflow: 'hidden', height: 250 }}>
                 <Image source={{ uri: item?.image }} style={{ width: '100%', height: '60%', resizeMode: 'cover', borderRadius: 10 }} />
                 <Text style={{ fontWeight: 'bold', color: 'black', fontSize: 15, paddingTop: 5, paddingLeft: 3 }}>

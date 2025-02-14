@@ -3,6 +3,7 @@ import loginSlice from '../features/loginSlice'
 import allProductSlice from "../features/allProductSlice";
 import productDetailsSlice from "../features/productDetailsSlice";
 import warehousemansSlice from "../features/warehousemansSlice";
+import updateStockSlice from "../features/updateQuantitySlice";
 
 export const store = configureStore({
     reducer:{
@@ -10,5 +11,6 @@ export const store = configureStore({
         allProduct : allProductSlice,
         productDetails : productDetailsSlice,
         allWarehousemans : warehousemansSlice,
+        updateStock : updateStockSlice,
     }
 })

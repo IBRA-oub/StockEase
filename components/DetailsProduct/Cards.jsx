@@ -4,7 +4,7 @@ import Entypo from '@expo/vector-icons/Entypo';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 
-const Cards = ({ productDeltailsPrice, productDeltailsSolde, productQuantity }) => {
+const Cards = ({ productDeltails, stockForCity }) => {
   return (
     <>
       
@@ -15,7 +15,7 @@ const Cards = ({ productDeltailsPrice, productDeltailsSolde, productQuantity }) 
           </View>
           <View style={{ height: 80, width: '100%', justifyContent: 'center', alignItems: 'center' }}>
             <Text style={{ fontSize: 18, fontWeight: '600', color: '#313131' }}>
-              {productDeltailsPrice}  DH
+              {productDeltails?.price}  DH
             </Text>
           </View>
         </View>
@@ -27,7 +27,7 @@ const Cards = ({ productDeltailsPrice, productDeltailsSolde, productQuantity }) 
           </View>
           <View style={{ height: 80, width: '100%', justifyContent: 'center', alignItems: 'center' }}>
             <Text style={{ fontSize: 18, fontWeight: '600', color: '#313131' }}>
-              {productDeltailsSolde ? `${productDeltailsSolde} DH` : '0 DH'}
+              {productDeltails?.solde ? `${productDeltails?.solde} DH` : '0 DH'}
             </Text>
           </View>
         </View>
@@ -39,7 +39,7 @@ const Cards = ({ productDeltailsPrice, productDeltailsSolde, productQuantity }) 
           </View>
           <View style={{ height: 80, width: '100%', justifyContent: 'center', alignItems: 'center' }}>
             <Text style={{ fontSize: 18, fontWeight: '600', color: '#313131' }}>
-              {productQuantity}
+            {stockForCity ? stockForCity?.quantity : '0'}
             </Text>
           </View>
         </View>

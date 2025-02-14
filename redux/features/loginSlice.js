@@ -11,18 +11,18 @@ const initialState = {
 
 export const login = createAsyncThunk('auth/login', async (secretKey, { rejectWithValue }) => {
     try {
-        
+
         const response = await axios.get(`${process.env.EXPO_PUBLIC_IP_ADDRESS}/warehousemans`)
         const users = response.data;
-        
+
         const warehouseman = users.find(user => user.secretKey.toLowerCase() === secretKey.secretKey.toLowerCase());
 
         if (warehouseman) {
 
-            await AsyncStorage.setItem('id' , warehouseman.id)
-            await AsyncStorage.setItem('name' , warehouseman.name)
-            await AsyncStorage.setItem('city' , warehouseman.city)
-            await AsyncStorage.setItem('secretKey' , warehouseman.secretKey)
+            await AsyncStorage.setItem('id', warehouseman.id)
+            await AsyncStorage.setItem('name', warehouseman.name)
+            await AsyncStorage.setItem('city', warehouseman.city)
+            await AsyncStorage.setItem('secretKey', warehouseman.secretKey)
 
             return warehouseman
         } else {
@@ -35,23 +35,23 @@ export const login = createAsyncThunk('auth/login', async (secretKey, { rejectWi
 })
 
 const loginSlice = createSlice({
-    name:'login',
+    name: 'login',
     initialState,
-    reducers:{},
-    extraReducers:(builder)=>{
+    reducers: {},
+    extraReducers: (builder) => {
         builder
-        .addCase(login.pending , (state)=>{
-            state.loading = true;
-            state.error = null
-        })
-        .addCase(login.fulfilled , (state,action)=>{
-            state.loading = false;
-            state.warehousemans = action.payload.warehousemans;
-        })
-        .addCase(login.rejected , (state,action)=>{
-            state.loading = false;
-            state.error = action.payload
-        })
+            .addCase(login.pending, (state) => {
+                state.loading = true;
+                state.error = null
+            })
+            .addCase(login.fulfilled, (state, action) => {
+                state.loading = false;
+                state.warehousemans = action.payload.warehousemans;
+            })
+            .addCase(login.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload
+            })
     }
 })
 

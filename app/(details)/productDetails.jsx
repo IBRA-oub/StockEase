@@ -1,23 +1,22 @@
-import { Alert, Image, Modal, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { Alert, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import AntDesign from '@expo/vector-icons/AntDesign';
 import images from '../../constants/images';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { useDispatch, useSelector } from 'react-redux';
-import { productDetailsSelector } from '../../redux/selectors/productDetailsSelectors';
-import { productDetails } from '../../redux/features/productDetailsSlice';
-import { warehousemans } from '../../redux/features/warehousemansSlice';
-import { warehousemansSelector } from '../../redux/selectors/warehousemansSelectors';
-import Line from '../../components/line';
+import Line from '../../components/DetailsProduct/Line';
 import ProductImage from '../../components/DetailsProduct/ProductImage';
 import LocationInfo from '../../components/DetailsProduct/LocationInfo';
 import TextDetail from '../../components/DetailsProduct/TextDetail';
 import Cards from '../../components/DetailsProduct/Cards';
-import WarehousemansEdit from '../../components/DetailsProduct/warehousemansEdit';
 import UpdateModal from '../../components/DetailsProduct/UpdateModal';
 import useProductAndWarehouseData from '../../hooks/useProductAndWarehouseData ';
+import WarehousemansEdite from '../../components/DetailsProduct/WarehousemansEdite';
+import { useDispatch } from 'react-redux';
+import { updateStock } from '../../redux/features/updateQuantitySlice';
+
+
 
 
 
@@ -28,21 +27,40 @@ const ProductDetails = () => {
   const id = params.id;
   const productCity = params.productCity;
   const productStockName = params.productStockName;
-  const productQuantity = params.productQuantity;
-
+  
+  
   //  dispatch data  hook
-const {productDeltails,warehousemansInfo} = useProductAndWarehouseData(id)
+  const dispatch = useDispatch()
+  const { productDeltails, warehousemansInfo, stockForCity } = useProductAndWarehouseData(id, productCity)
+ 
+  useEffect(() => {
+    if (stockForCity?.quantity !== undefined) {
+      setQuantity(stockForCity?.quantity.toString());
+    }
+  }, [stockForCity?.quantity]);
 
   const [editeQuantity, setEditeQuantity] = useState(false);
   const [quantity, setQuantity] = useState('');
   const router = useRouter()
 
+
+
   // update function
   const handleSubmit = async (e) => {
-    setEditeQuantity(false)
-    console.log(quantity)
     e.preventDefault()
+    const data = {
+      id: productDeltails?.id,
+      city: productCity,
+      quantity
+    }
+    const response = await dispatch(updateStock(data))
+
+    if (response.meta.requestStatus === "fulfilled") {
+      setEditeQuantity(false)
+    }
   }
+
+
 
   // delete alert 
   const handleDelete = () => {
@@ -82,7 +100,7 @@ const {productDeltails,warehousemansInfo} = useProductAndWarehouseData(id)
         <Line />
 
         <View style={{ width: '100%', height: 150, flexDirection: 'row', alignItems: 'center', paddingLeft: 10 }}>
-          <Cards productDeltailsPrice={productDeltails?.price} productDeltailsSolde={productDeltails?.solde} productQuantity={productQuantity} />
+          <Cards productDeltails={productDeltails} stockForCity={stockForCity} />
         </View>
 
         <TextDetail titre={'Barcode'} description={productDeltails?.barcode} />
@@ -90,7 +108,7 @@ const {productDeltails,warehousemansInfo} = useProductAndWarehouseData(id)
 
         <Line />
 
-        <WarehousemansEdit warehousemansInfo={warehousemansInfo} />
+        <WarehousemansEdite warehousemansInfo={warehousemansInfo} />
 
         <Line />
 

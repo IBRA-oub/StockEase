@@ -36,10 +36,7 @@ export const updateStock = createAsyncThunk('product/updateStock', async (produc
         } else {
             updatedEditedBy.push({ warehousemanId: warehousemanId, at: date });
         }
-
-        console.log(updatedEditedBy)
-
-
+        
         const updatedStock = productData?.stocks?.map(stock =>
             stock.localisation.city === city ? { ...stock, quantity: parseInt(quantity, 10) } : stock
         );

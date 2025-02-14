@@ -1,5 +1,8 @@
 import React from 'react';
 import { Modal, View, Text, TouchableOpacity } from 'react-native';
+import Octicons from '@expo/vector-icons/Octicons';
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+
 
 const FilterModal = ({ isVisible, onClose, onCreateProduct, onFilterChange }) => {
   return (
@@ -18,16 +21,24 @@ const FilterModal = ({ isVisible, onClose, onCreateProduct, onFilterChange }) =>
           </TouchableOpacity>
 
           <Text style={{ fontSize: 16, fontWeight: 'bold', marginTop: 15 }}>Sort by:</Text>
-          <TouchableOpacity style={{ padding: 10, borderBottomWidth: 1, borderBottomColor: '#ddd' }} onPress={() => onFilterChange('A-Z')}>
+          <TouchableOpacity style={{ padding: 10, borderBottomWidth: 1, borderBottomColor: '#ddd',flexDirection:'row',justifyContent:'space-between' }} onPress={() => onFilterChange('A-Z')}>
             <Text style={{ fontSize: 16, color: 'black' }}>A-Z</Text>
+            <MaterialCommunityIcons name="sort-alphabetical-ascending-variant" size={20} color="gray" />
           </TouchableOpacity>
 
-          <TouchableOpacity style={{ padding: 10, borderBottomWidth: 1, borderBottomColor: '#ddd' }} onPress={() => onFilterChange('quantity')}>
+          <TouchableOpacity style={{ padding: 10, borderBottomWidth: 1, borderBottomColor: '#ddd',flexDirection:'row',justifyContent:'space-between' }} onPress={() => onFilterChange('quantity')}>
             <Text style={{ fontSize: 16, color: 'black' }}>Quantity</Text>
+            <MaterialCommunityIcons name="sort-numeric-descending-variant" size={20} color="gray" />
           </TouchableOpacity>
 
-          <TouchableOpacity style={{ padding: 10, borderBottomWidth: 1, borderBottomColor: '#ddd' }} onPress={() => onFilterChange('price')}>
-            <Text style={{ fontSize: 16, color: 'black' }}>Price</Text>
+          <TouchableOpacity style={{ padding: 10, borderBottomWidth: 1, borderBottomColor: '#ddd',flexDirection:'row',justifyContent:'space-between' }} onPress={() => onFilterChange('priceAsc')}>
+            <Text style={{ fontSize: 16, color: 'black' }}>Price Asc</Text>
+            <Octicons name="sort-asc" size={20} color="gray" />
+          </TouchableOpacity>
+
+          <TouchableOpacity style={{ padding: 10,flexDirection:'row',justifyContent:'space-between' }} onPress={() => onFilterChange('priceDesc')}>
+            <Text style={{ fontSize: 16, color: 'black' }}>Price Desc</Text>
+            <MaterialCommunityIcons name="sort-ascending" size={20} color="gray" />
           </TouchableOpacity>
 
           <TouchableOpacity

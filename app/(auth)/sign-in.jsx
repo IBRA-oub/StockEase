@@ -14,7 +14,7 @@ const signIn = () => {
     const dispatch = useDispatch()
 
     const handleSubmit = async (e) => {
-        e.preventDefault()
+       
         try {
             const response = await dispatch(login(secretKey))
             if (response.meta.requestStatus === 'fulfilled') {

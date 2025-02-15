@@ -109,6 +109,66 @@
           "at": "2025-02-15"
         }
       ]
+    },
+    {
+      "id": "1739650585833",
+      "name": "table gamer",
+      "type": "fournitur ",
+      "barcode": "123456786123546",
+      "price": 10000,
+      "solde": 8999,
+      "supplier": "ikea",
+      "image": "https://bunny-wp-pullzone-cbh8ghlmbr.b-cdn.net/wp-content/uploads/2021/11/headquarter-200-2-600x600.png",
+      "stocks": [
+        {
+          "id": 1739650585833,
+          "name": "Gueliz B2",
+          "quantity": 2006,
+          "localisation": {
+            "city": "Marrakesh",
+            "latitude": "0",
+            "longitude": "0"
+          }
+        }
+      ],
+      "editedBy": [
+        {
+          "warehousemanId": 1333,
+          "at": "2025-02-15"
+        },
+        {
+          "warehousemanId": 1444,
+          "at": "2025-02-15"
+        }
+      ]
+    },
+    {
+      "id": "1739650772957",
+      "name": "pc gamer",
+      "type": "informatique",
+      "barcode": "123456789123456",
+      "price": 10000,
+      "solde": 20000,
+      "supplier": "lenovo",
+      "image": "https://osaka.ma/wp-content/uploads/2024/03/PC-GAMER-I9-12900K-RTX-4060TI-NOX-HUMMER-ASTRA-RGB-MAROC.png",
+      "stocks": [
+        {
+          "id": 1739650772957,
+          "name": "stok ofCasablanca",
+          "quantity": 30000,
+          "localisation": {
+            "city": "Casablanca",
+            "latitude": "0",
+            "longitude": "0"
+          }
+        }
+      ],
+      "editedBy": [
+        {
+          "warehousemanId": 1444,
+          "at": "2025-02-15"
+        }
+      ]
     }
   ],
   "warehousemans": [

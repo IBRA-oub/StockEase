@@ -46,11 +46,9 @@ const ProductDetails = () => {
   // const [productCity, setProductCity] = useState('');
   const router = useRouter()
 
-
-console.log(productDeltails)
   // update function
   const handleSubmit = async (e) => {
-    e.preventDefault()
+   
     const data = {
       id: productDeltails?.id,
       city: productCity,

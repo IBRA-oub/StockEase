@@ -60,7 +60,7 @@
         {
           "id": 2991,
           "name": "Lazari H2",
-          "quantity": 23,
+          "quantity": 25,
           "localisation": {
             "city": "Oujda",
             "latitude": 34.689404,
@@ -75,7 +75,7 @@
         },
         {
           "warehousemanId": 1333,
-          "at": "2025-02-14"
+          "at": "2025-02-15"
         }
       ]
     },
@@ -87,11 +87,26 @@
       "price": 11000,
       "supplier": "HP",
       "image": "https://technoplace.ma/11482-large_default/hp-omen-17-i7-7700hq-173-16gb-2tb-geforce-gtx-10.jpg",
-      "stocks": [],
+      "stocks": [
+        {
+          "id": 1739639344375,
+          "name": "Stock Oujda",
+          "quantity": 5,
+          "localisation": {
+            "city": "Oujda",
+            "latitude": 0,
+            "longitude": 0
+          }
+        }
+      ],
       "editedBy": [
         {
           "warehousemanId": 1444,
           "at": "2025-02-02"
+        },
+        {
+          "warehousemanId": 1333,
+          "at": "2025-02-15"
         }
       ]
     }

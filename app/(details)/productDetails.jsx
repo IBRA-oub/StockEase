@@ -36,15 +36,18 @@ const ProductDetails = () => {
   useEffect(() => {
     if (stockForCity?.quantity !== undefined) {
       setQuantity(stockForCity?.quantity.toString());
+    }else{
+      setQuantity('0')
     }
   }, [stockForCity?.quantity]);
 
   const [editeQuantity, setEditeQuantity] = useState(false);
   const [quantity, setQuantity] = useState('');
+  // const [productCity, setProductCity] = useState('');
   const router = useRouter()
 
 
-
+console.log(productDeltails)
   // update function
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -93,7 +96,7 @@ const ProductDetails = () => {
       </View>
       <ScrollView style={{ flex: 1, backgroundColor: 'white' }}>
 
-        <ProductImage imageSource={images.warehouse} />
+        <ProductImage imageSource={productDeltails?.image} />
 
         <LocationInfo productCity={productCity} productStockName={productStockName} productDeltailsName={productDeltails?.name} productDeltailsType={productDeltails?.type} />
 

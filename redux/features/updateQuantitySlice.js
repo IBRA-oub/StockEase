@@ -19,27 +19,41 @@ export const updateStock = createAsyncThunk('product/updateStock', async (produc
         let quantity = product.quantity
         let city = product.city
         const warehousemanIdString = await AsyncStorage.getItem('id');
-        const warehousemanId = warehousemanIdString ? parseInt(warehousemanIdString, 10) : null; 
-        
+        const warehousemanCity = await AsyncStorage.getItem('city');
+        const warehousemanId = warehousemanIdString ? parseInt(warehousemanIdString, 10) : null;
+
         const date = new Date().toISOString().split('T')[0]
 
         let updatedEditedBy = productData?.editedBy || [];
 
-        const updateWarehouseman = updatedEditedBy?.map(user =>
-            user.warehousemanId === warehousemanId ? true : []
-        );
+        // edite By update 
 
-        if (updateWarehouseman.includes(true)) {
-            updatedEditedBy = updatedEditedBy.map(user =>
-                user.warehousemanId === warehousemanId ? { ...user, at: date } : user
-            );
+        const existingEditor = updatedEditedBy.find(user => user.warehousemanId === warehousemanId);
+        console.log('existingEditor',existingEditor)
+        if (existingEditor) {
+            existingEditor.at = date;
         } else {
-            updatedEditedBy.push({ warehousemanId: warehousemanId, at: date });
+            updatedEditedBy.push({ warehousemanId, at: date });
         }
-        
-        const updatedStock = productData?.stocks?.map(stock =>
-            stock.localisation.city === city ? { ...stock, quantity: parseInt(quantity, 10) } : stock
-        );
+
+        // stocks update
+        let updatedStock = [...productData?.stocks];
+        const existingStock  = updatedStock.find(stock => stock.localisation.city === city);
+        console.log('quantity',quantity)
+        if (existingStock ) {
+            existingStock .quantity = parseInt(quantity, 10);
+        } else {
+            updatedStock.push({
+                id: Date.now(),
+                name: `Stock ${warehousemanCity}`,
+                quantity: parseInt(quantity, 10),
+                localisation: {
+                    city: warehousemanCity,
+                    latitude: 0,
+                    longitude: 0
+                }
+            });
+        }
 
         const updatedProduct = { ...productData, stocks: updatedStock, editedBy: updatedEditedBy };
 

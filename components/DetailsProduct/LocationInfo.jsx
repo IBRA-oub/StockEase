@@ -3,7 +3,6 @@ import React from 'react'
 import Entypo from '@expo/vector-icons/Entypo';
 
 const LocationInfo = ({productCity,productStockName,productDeltailsName ,productDeltailsType }) => {
-    console.log(productStockName)
     return (
         <>
             <View style={{ width: '100%', height: 45, flexDirection: 'row', alignItems: 'center', paddingLeft: '10' }}>

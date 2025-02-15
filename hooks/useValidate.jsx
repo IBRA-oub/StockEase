@@ -1,10 +1,8 @@
-"use client"
-
 import { useState } from "react"
 
 export function useValidate() {
   const [fields, setFields] = useState({
-    name: "",
+    productName: "",
     type: "",
     barCode: "",
     price: "",
@@ -21,10 +19,10 @@ export function useValidate() {
     setErrors({})
     let isFormValid = true
 
-    const { name, type, barCode, price, discount, supplier, image, city, quantity } = fields
+    const { productName, type, barCode, price, discount, supplier, image, city, quantity } = fields
 
-    if (name.trim() === "") {
-      setErrors((prevState) => ({ ...prevState, name: "Product name is required" }))
+    if (productName.trim() === "") {
+      setErrors((prevState) => ({ ...prevState, productName: "Product name is required" }))
       isFormValid = false
     }
 
@@ -82,7 +80,7 @@ export function useValidate() {
 
   const resetForm = () => {
     setFields({
-      name: "",
+      productName: "",
       type: "",
       barCode: "",
       price: "",

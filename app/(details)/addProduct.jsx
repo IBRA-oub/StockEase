@@ -4,13 +4,19 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { useRouter } from 'expo-router';
 import { useValidate } from '../../hooks/useValidate';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useDispatch } from 'react-redux';
+import { addProduct } from '../../redux/features/addProductSlice';
+import CitySelector from '../../components/CitySelector';
 
 
 const AddProduct = () => {
     const router = useRouter()
+    const dispatch = useDispatch()
     //  data
+    const [stockName, setStockName] = useState('')
     const [form, setForm] = useState({
-        name: "",
+        productName: "",
         type: "",
         barCode: "",
         price: "",
@@ -20,16 +26,57 @@ const AddProduct = () => {
         city: "",
         quantity: "",
     })
+    const handleSelectCity = (city, stockName) => {
+        setStockName(stockName)
+        setForm({ ...form, city });
+    };
     // validat hook
     const { validateForm, getError, hasError, resetForm } = useValidate()
 
     // submit function
     const handleSubmit = async (e) => {
-        e.preventDefault()
-        if (validateForm(form)) {
-            console.log('hey')
+        const warehousemanIdString = await AsyncStorage.getItem('id');
+        const warehousemanId = warehousemanIdString ? parseInt(warehousemanIdString, 10) : null;
+        const date = new Date().toISOString().split('T')[0]
+
+        if (validateForm(form) == true) {
+            const newProduct = {
+                id: Date.now().toString(),
+                name: form.productName,
+                type: form.type,
+                barcode: form.barCode,
+                price: parseInt(form.price, 10),
+                solde: parseInt(form.discount, 10),
+                supplier: form.supplier,
+                image: form.image,
+                stocks: [
+                    {
+                        id: Date.now(),
+                        name: stockName ? stockName : 'stok of ' + form.city,
+                        quantity: parseInt(form.quantity, 10),
+                        localisation: {
+                            city: form.city,
+                            latitude: '0',
+                            longitude: '0',
+                        }
+
+                    }
+                ],
+                editedBy: [
+                    {
+                        warehousemanId,
+                        at: date
+                    }
+                ]
+            }
+
+
+            const response = await dispatch(addProduct(newProduct))
             resetForm();
-            setForm({  name: "",type: "",barCode: "",price: "", discount: "",supplier: "",image: "", city: "",quantity: "",});
+            setForm({ productName: "", type: "", barCode: "", price: "", discount: "", supplier: "", image: "", city: "", quantity: "", });
+            if (response.meta.requestStatus === "fulfilled") {
+                router.back()
+            }
         }
     }
     return (
@@ -54,19 +101,19 @@ const AddProduct = () => {
                         <View style={{ width: '95%', marginBottom: 20 }}>
                             <Text style={{ fontSize: 16, fontWeight: '600', marginBottom: 5, color: '#C67C4E' }}>Name</Text>
                             <TextInput
-                                style={[{ height: 50, borderColor: '#C67C4E', borderWidth: 1, borderRadius: 7, paddingLeft: 10, fontSize: 15, },hasError("name") && { borderColor: 'red' },]}
+                                style={[{ height: 50, borderColor: '#C67C4E', borderWidth: 1, borderRadius: 7, paddingLeft: 10, fontSize: 15, }, hasError("productName") && { borderColor: 'red' },]}
                                 placeholder={'Clavier mecanique'}
                                 placeholderTextColor={'gray'}
-                                value={form.name}
-                                onChangeText={(e) => setForm({ ...form, name: e })}
+                                value={form.productName}
+                                onChangeText={(e) => setForm({ ...form, productName: e })}
                             />
-                            {hasError("name") && <Text style={styles.errorText}>{getError("name")}</Text>}
+                            {hasError("productName") && <Text style={styles.errorText}>{getError("productName")}</Text>}
                         </View>
 
                         <View style={{ width: '95%', marginBottom: 20 }}>
                             <Text style={{ fontSize: 16, fontWeight: '600', marginBottom: 5, color: '#C67C4E' }}>Type</Text>
                             <TextInput
-                                style={[{ height: 50, borderColor: '#C67C4E', borderWidth: 1, borderRadius: 7, paddingLeft: 10, fontSize: 15, },hasError("type") && { borderColor: 'red' },]}
+                                style={[{ height: 50, borderColor: '#C67C4E', borderWidth: 1, borderRadius: 7, paddingLeft: 10, fontSize: 15, }, hasError("type") && { borderColor: 'red' },]}
                                 placeholder={'Informatique'}
                                 placeholderTextColor={'gray'}
                                 value={form.type}
@@ -78,7 +125,7 @@ const AddProduct = () => {
                         <View style={{ width: '95%', marginBottom: 20 }}>
                             <Text style={{ fontSize: 16, fontWeight: '600', marginBottom: 5, color: '#C67C4E' }}>Bar-Code</Text>
                             <TextInput
-                                style={[{ height: 50, borderColor: '#C67C4E', borderWidth: 1, borderRadius: 7, paddingLeft: 10, fontSize: 15, },hasError("barCode") && { borderColor: 'red' },]}
+                                style={[{ height: 50, borderColor: '#C67C4E', borderWidth: 1, borderRadius: 7, paddingLeft: 10, fontSize: 15, }, hasError("barCode") && { borderColor: 'red' },]}
                                 placeholder={'12345678999'}
                                 placeholderTextColor={'gray'}
                                 keyboardType="numeric"
@@ -91,7 +138,7 @@ const AddProduct = () => {
                         <View style={{ width: '95%', marginBottom: 20 }}>
                             <Text style={{ fontSize: 16, fontWeight: '600', marginBottom: 5, color: '#C67C4E' }}>Price</Text>
                             <TextInput
-                                style={[{ height: 50, borderColor: '#C67C4E', borderWidth: 1, borderRadius: 7, paddingLeft: 10, fontSize: 15, },hasError("price") && { borderColor: 'red' },]}
+                                style={[{ height: 50, borderColor: '#C67C4E', borderWidth: 1, borderRadius: 7, paddingLeft: 10, fontSize: 15, }, hasError("price") && { borderColor: 'red' },]}
                                 placeholder={'200'}
                                 placeholderTextColor={'gray'}
                                 keyboardType="numeric"
@@ -104,12 +151,12 @@ const AddProduct = () => {
                         <View style={{ width: '95%', marginBottom: 20 }}>
                             <Text style={{ fontSize: 16, fontWeight: '600', marginBottom: 5, color: '#C67C4E' }}>Discount</Text>
                             <TextInput
-                                style={[{ height: 50, borderColor: '#C67C4E', borderWidth: 1, borderRadius: 7, paddingLeft: 10, fontSize: 15, },hasError("discount") && { borderColor: 'red' },]}
+                                style={[{ height: 50, borderColor: '#C67C4E', borderWidth: 1, borderRadius: 7, paddingLeft: 10, fontSize: 15, }, hasError("discount") && { borderColor: 'red' },]}
                                 placeholder={'120'}
                                 placeholderTextColor={'gray'}
                                 keyboardType="numeric"
                                 value={form.discount}
-                                
+
                                 onChangeText={(e) => setForm({ ...form, discount: e })}
                             />
                             {hasError("discount") && <Text style={styles.errorText}>{getError("discount")}</Text>}
@@ -118,7 +165,7 @@ const AddProduct = () => {
                         <View style={{ width: '95%', marginBottom: 20 }}>
                             <Text style={{ fontSize: 16, fontWeight: '600', marginBottom: 5, color: '#C67C4E' }}>supplier</Text>
                             <TextInput
-                                style={[{ height: 50, borderColor: '#C67C4E', borderWidth: 1, borderRadius: 7, paddingLeft: 10, fontSize: 15, },hasError("supplier") && { borderColor: 'red' },]}
+                                style={[{ height: 50, borderColor: '#C67C4E', borderWidth: 1, borderRadius: 7, paddingLeft: 10, fontSize: 15, }, hasError("supplier") && { borderColor: 'red' },]}
                                 placeholder={'Hp'}
                                 placeholderTextColor={'gray'}
                                 value={form.supplier}
@@ -130,7 +177,7 @@ const AddProduct = () => {
                         <View style={{ width: '95%', marginBottom: 20 }}>
                             <Text style={{ fontSize: 16, fontWeight: '600', marginBottom: 5, color: '#C67C4E' }}>Image</Text>
                             <TextInput
-                                style={[{ height: 50, borderColor: '#C67C4E', borderWidth: 1, borderRadius: 7, paddingLeft: 10, fontSize: 15, },hasError("image") && { borderColor: 'red' }]}
+                                style={[{ height: 50, borderColor: '#C67C4E', borderWidth: 1, borderRadius: 7, paddingLeft: 10, fontSize: 15, }, hasError("image") && { borderColor: 'red' }]}
                                 placeholder={'https://www.image.com'}
                                 placeholderTextColor={'gray'}
                                 value={form.image}
@@ -139,23 +186,17 @@ const AddProduct = () => {
                             {hasError("image") && <Text style={styles.errorText}>{getError("image")}</Text>}
                         </View>
 
-                        <View style={{ width: '95%', marginBottom: 20 }}>
-                            <Text style={{ fontSize: 16, fontWeight: '600', marginBottom: 5, color: '#C67C4E' }}>City</Text>
-                            <TextInput
-                                style={[{ height: 50, borderColor: '#C67C4E', borderWidth: 1, borderRadius: 7, paddingLeft: 10, fontSize: 15, },hasError("city") && { borderColor: 'red' }]}
-                                placeholder={'Marrakech'}
-                                placeholderTextColor={'gray'}
-                                value={form.city}
-                                onChangeText={(e) => setForm({ ...form, city: e })}
-                            />
-                            {hasError("city") && <Text style={styles.errorText}>{getError("city")}</Text>}
-                        </View>
+                        <CitySelector
+                            value={form.city}
+                            onSelect={handleSelectCity}
+                            error={hasError("city") ? getError("city") : null}
+                        />
 
                         <View style={{ width: '95%', marginBottom: 20 }}>
                             <Text style={{ fontSize: 16, fontWeight: '600', marginBottom: 5, color: '#C67C4E' }}>Quantity</Text>
                             <TextInput
-                                style={[{ height: 50, borderColor: '#C67C4E', borderWidth: 1, borderRadius: 7, paddingLeft: 10, fontSize: 15, },hasError("quantity") && { borderColor: 'red' }]}
-                                placeholder={'22222'}
+                                style={[{ height: 50, borderColor: '#C67C4E', borderWidth: 1, borderRadius: 7, paddingLeft: 10, fontSize: 15, }, hasError("quantity") && { borderColor: 'red' }]}
+                                placeholder={'2000'}
                                 placeholderTextColor={'gray'}
                                 keyboardType="numeric"
                                 value={form.quantity}

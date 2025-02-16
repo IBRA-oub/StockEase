@@ -54,18 +54,22 @@
 ```bash
 git clone https://github.com/IBRA-oub/StockEase.git
 cd StockEase
+```
 
 2️⃣ **Installer les dépendances**
 ```bash
 npm install
+```
 
 3️⃣ **Démarrer le JSON server**
 ```bash
 npx json-server db.json
+```
 
 4️⃣ **Démarrer le frontend**
 ```bash
 npx expo start
+```
 
 5️⃣ **Accéder à l'application**
   - Scan the QR code with expo go or with your camera for IOS

@@ -30,6 +30,7 @@ const AddProduct = () => {
         city: "",
         quantity: "",
     })
+    
     const handleSelectCity = (city, stockName) => {
         setStockName(stockName)
         setForm({ ...form, city });
@@ -42,7 +43,7 @@ const AddProduct = () => {
     const { validateForm, getError, hasError, resetForm } = useValidate()
 
     // submit function
-    const handleSubmit = async (e) => {
+    const handleSubmit = async() => {
         const warehousemanIdString = await AsyncStorage.getItem('id');
         const warehousemanId = warehousemanIdString ? parseInt(warehousemanIdString, 10) : null;
         const date = new Date().toISOString().split('T')[0]
@@ -87,6 +88,7 @@ const AddProduct = () => {
             }
         }
     }
+
     return (
         <SafeAreaView style={styles.container}>
             <View style={{ width: '100%', height: 44, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>

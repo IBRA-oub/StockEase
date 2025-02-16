@@ -15,11 +15,11 @@ const   useProductAndWarehouseData = (id,productCity) => {
         }
         dispatch(warehousemans())
     }, [dispatch])
-    const productDeltails = useSelector(productDetailsSelector)
+    const productDetail = useSelector(productDetailsSelector)
     const warehousemansData = useSelector(warehousemansSelector)
 
     // information of edite by  
-    const warehousemansInfo = productDeltails?.editedBy?.map((edit) => {
+    const warehousemansInfo = productDetail?.editedBy?.map((edit) => {
         const warehouseman = warehousemansData?.find(user => user.id == edit.warehousemanId) || null;
         return {
             editedAt: edit.at,
@@ -27,9 +27,9 @@ const   useProductAndWarehouseData = (id,productCity) => {
         };
     })
 
-    const stockForCity = productDeltails?.stocks?.find(stock => stock?.localisation?.city === productCity);
+    const stockForCity = productDetail?.stocks?.find(stock => stock?.localisation?.city === productCity);
 
-    return { productDeltails, warehousemansInfo,stockForCity };
+    return { productDetail, warehousemansInfo,stockForCity };
 }
 
 export default useProductAndWarehouseData;

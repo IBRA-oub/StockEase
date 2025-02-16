@@ -13,7 +13,7 @@ const signIn = () => {
 
     const dispatch = useDispatch()
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = async() => {
        
         try {
             const response = await dispatch(login(secretKey))

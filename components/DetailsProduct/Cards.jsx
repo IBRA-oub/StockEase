@@ -4,7 +4,7 @@ import Entypo from '@expo/vector-icons/Entypo';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 
-const Cards = ({ productDeltails, stockForCity }) => {
+const Cards = ({ productDetail, stockForCity }) => {
   return (
     <>
       
@@ -15,7 +15,7 @@ const Cards = ({ productDeltails, stockForCity }) => {
           </View>
           <View style={{ height: 80, width: '100%', justifyContent: 'center', alignItems: 'center' }}>
             <Text style={{ fontSize: 18, fontWeight: '600', color: '#313131' }}>
-              {productDeltails?.price}  DH
+              {productDetail?.price}  DH
             </Text>
           </View>
         </View>
@@ -27,7 +27,7 @@ const Cards = ({ productDeltails, stockForCity }) => {
           </View>
           <View style={{ height: 80, width: '100%', justifyContent: 'center', alignItems: 'center' }}>
             <Text style={{ fontSize: 18, fontWeight: '600', color: '#313131' }}>
-              {productDeltails?.solde ? `${productDeltails?.solde} DH` : '0 DH'}
+              {productDetail?.solde ? `${productDetail?.solde} DH` : '0 DH'}
             </Text>
           </View>
         </View>

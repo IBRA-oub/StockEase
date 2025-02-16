@@ -2,8 +2,6 @@ import { Alert, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View 
 import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import AntDesign from '@expo/vector-icons/AntDesign';
-import images from '../../constants/images';
-import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import Line from '../../components/DetailsProduct/Line';
 import ProductImage from '../../components/DetailsProduct/ProductImage';
@@ -15,14 +13,15 @@ import useProductAndWarehouseData from '../../hooks/useProductAndWarehouseData '
 import WarehousemansEdite from '../../components/DetailsProduct/WarehousemansEdite';
 import { useDispatch } from 'react-redux';
 import { updateStock } from '../../redux/features/updateQuantitySlice';
-
+import Ionicons from '@expo/vector-icons/Ionicons';
+import { printProductDetails } from '../../components/DetailsProduct/Print';
 
 
 
 
 const ProductDetails = () => {
 
-  // get city from params 
+  // get data from params 
   const params = useLocalSearchParams();
   const id = params.id;
   const productCity = params.productCity;
@@ -31,7 +30,7 @@ const ProductDetails = () => {
   
   //  dispatch data  hook
   const dispatch = useDispatch()
-  const { productDeltails, warehousemansInfo, stockForCity } = useProductAndWarehouseData(id, productCity)
+  const { productDetail, warehousemansInfo, stockForCity } = useProductAndWarehouseData(id, productCity)
  
   useEffect(() => {
     if (stockForCity?.quantity !== undefined) {
@@ -43,14 +42,13 @@ const ProductDetails = () => {
 
   const [editeQuantity, setEditeQuantity] = useState(false);
   const [quantity, setQuantity] = useState('');
-  // const [productCity, setProductCity] = useState('');
   const router = useRouter()
 
   // update function
   const handleSubmit = async (e) => {
    
     const data = {
-      id: productDeltails?.id,
+      id: productDetail?.id,
       city: productCity,
       quantity
     }
@@ -63,21 +61,26 @@ const ProductDetails = () => {
 
 
 
-  // delete alert 
-  const handleDelete = () => {
+  // print alert 
+  const handlePrint = () => {
     Alert.alert(
-      "Confirm Deletion",
-      "Are you sure you want to delete this product?",
+      "Confirm Print",
+      "Are you want to print this product?",
       [
         {
           text: "Cancel",
-          onPress: () => console.log("Cancel Pressed"),
           style: "cancel"
         },
         {
           text: "Confirm",
-          onPress: () => {
-            console.log("Product deleted");
+          onPress: async () => {
+            if (productDetail) {
+              try {
+                  await printProductDetails(productDetail,productCity);
+              } catch (error) {
+                  console.error(error);
+              }
+          }
 
           }
         }
@@ -94,18 +97,18 @@ const ProductDetails = () => {
       </View>
       <ScrollView style={{ flex: 1, backgroundColor: 'white' }}>
 
-        <ProductImage imageSource={productDeltails?.image} />
+        <ProductImage imageSource={productDetail?.image} />
 
-        <LocationInfo productCity={productCity} productStockName={productStockName} productDeltailsName={productDeltails?.name} productDeltailsType={productDeltails?.type} />
+        <LocationInfo productCity={productCity} productStockName={productStockName} productDetailsName={productDetail?.name} productDetailsType={productDetail?.type} />
 
         <Line />
 
         <View style={{ width: '100%', height: 150, flexDirection: 'row', alignItems: 'center', paddingLeft: 10 }}>
-          <Cards productDeltails={productDeltails} stockForCity={stockForCity} />
+          <Cards productDetail={productDetail} stockForCity={stockForCity} />
         </View>
 
-        <TextDetail titre={'Barcode'} description={productDeltails?.barcode} />
-        <TextDetail titre={'Supplier'} description={productDeltails?.supplier} />
+        <TextDetail titre={'Barcode'} description={productDetail?.barcode} />
+        <TextDetail titre={'Supplier'} description={productDetail?.supplier} />
 
         <Line />
 
@@ -114,8 +117,8 @@ const ProductDetails = () => {
         <Line />
 
         <View style={{ width: '100%', height: 75, flexDirection: 'row', alignItems: 'center', paddingLeft: 10, marginTop: 10 }}>
-          <TouchableOpacity onPress={handleDelete} style={{ width: '30%', height: '80%', overflow: 'hidden', borderRadius: 10, justifyContent: 'center', alignItems: 'center', borderWidth: 1, borderColor: '#E3E3E3' }}>
-            <FontAwesome name="trash" size={34} color="#C67C4E" />
+          <TouchableOpacity onPress={handlePrint} style={{ width: '30%', height: '80%', overflow: 'hidden', borderRadius: 10, justifyContent: 'center', alignItems: 'center', borderWidth: 1, borderColor: '#E3E3E3' }}>
+            <Ionicons name="print" size={34} color="#C67C4E" />
           </TouchableOpacity>
 
           <TouchableOpacity onPress={() => setEditeQuantity(true)} style={{ width: '65%', height: '80%', backgroundColor: '#C67C4E', overflow: 'hidden', borderRadius: 10, justifyContent: 'center', alignItems: 'center', marginLeft: 10 }}>

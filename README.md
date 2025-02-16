@@ -48,6 +48,8 @@
 - 🔍 **Scanner** : `expo-camera` pour la lecture des codes-barres.
 - 🖨️ **Export PDF** : `expo-print` pour la génération de rapports.
 
+![Screenshot 2025-02-16 232107](https://github.com/user-attachments/assets/72551d7b-f0b6-41b6-9967-1ede368666df)
+
 ## 📥 **Installation et Exécution du Projet**
 
 1️⃣ **Cloner le projet**

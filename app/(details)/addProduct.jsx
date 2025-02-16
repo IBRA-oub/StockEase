@@ -1,5 +1,5 @@
-import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
-import React, { useState } from 'react'
+import { KeyboardAvoidingView, Modal, Platform, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import React, { useRef, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { useRouter } from 'expo-router';
@@ -8,6 +8,10 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useDispatch } from 'react-redux';
 import { addProduct } from '../../redux/features/addProductSlice';
 import CitySelector from '../../components/CitySelector';
+import { Camera, CameraView } from 'expo-camera';
+import useCameraPermission from '../../hooks/useCameraPermission';
+import useBarcodeScanner from '../../hooks/useBarcodeScanner';
+import { Ionicons } from "@expo/vector-icons";
 
 
 const AddProduct = () => {
@@ -30,6 +34,10 @@ const AddProduct = () => {
         setStockName(stockName)
         setForm({ ...form, city });
     };
+
+    const hasPermission = useCameraPermission();
+    const cameraRef = useRef(null);
+    const { scanning, setScanning, handleBarCodeScanned } = useBarcodeScanner(setForm);
     // validat hook
     const { validateForm, getError, hasError, resetForm } = useValidate()
 
@@ -85,7 +93,7 @@ const AddProduct = () => {
                 <TouchableOpacity onPress={() => router.back()} style={{ width: '16%', paddingLeft: 3 }}>
                     <AntDesign name="left" size={34} color="black" />
                 </TouchableOpacity>
-                <TouchableOpacity style={{ width: '16%', paddingLeft: 3 }}>
+                <TouchableOpacity onPress={() => setScanning(true)} style={{ width: '16%', paddingLeft: 3 }}>
                     <AntDesign name="qrcode" size={44} color="#C67C4E" />
                 </TouchableOpacity>
 
@@ -211,7 +219,21 @@ const AddProduct = () => {
                             </Text>
                         </TouchableOpacity>
                     </View>
-
+                    {scanning && hasPermission && (
+                        <Modal visible={scanning} animationType="slide" transparent={false}>
+                            <View style={{flex: 1, justifyContent: "center",alignItems: "center",backgroundColor: "black",}}>
+                                <CameraView
+                                    ref={cameraRef}
+                                    style={StyleSheet.absoluteFillObject}
+                                    onBarcodeScanned={handleBarCodeScanned}
+                                    ratio="16:9"
+                                />
+                                <TouchableOpacity style={{position: "absolute",top: 50,right: 20,}} onPress={() => setScanning(false)}>
+                                    <Ionicons name="close-circle-outline" size={40} color="white" />
+                                </TouchableOpacity>
+                            </View>
+                        </Modal>
+                    )}
                 </ScrollView>
             </KeyboardAvoidingView>
         </SafeAreaView>

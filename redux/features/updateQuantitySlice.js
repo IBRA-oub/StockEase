@@ -29,7 +29,6 @@ export const updateStock = createAsyncThunk('product/updateStock', async (produc
         // edite By update 
 
         const existingEditor = updatedEditedBy.find(user => user.warehousemanId === warehousemanId);
-        console.log('existingEditor',existingEditor)
         if (existingEditor) {
             existingEditor.at = date;
         } else {
@@ -39,7 +38,6 @@ export const updateStock = createAsyncThunk('product/updateStock', async (produc
         // stocks update
         let updatedStock = [...productData?.stocks];
         const existingStock  = updatedStock.find(stock => stock.localisation.city === city);
-        console.log('quantity',quantity)
         if (existingStock ) {
             existingStock .quantity = parseInt(quantity, 10);
         } else {

@@ -169,6 +169,34 @@
           "at": "2025-02-15"
         }
       ]
+    },
+    {
+      "id": "1739716606836",
+      "name": "sidi alo",
+      "type": "water",
+      "barcode": "6111035000430",
+      "price": 2,
+      "solde": 0,
+      "supplier": "sidi ali",
+      "image": "https://lh5.googleusercontent.com/proxy/I3Akmbz7HhBTQO1bIX8axJi-Lr9E1D_0_0kM3ZeBMsDfOB0fm5zXMZj92_54eoa6veyp4S8NesItCZPEXYbo2G-7Tox6Qx7v8OVZdUQM",
+      "stocks": [
+        {
+          "id": 1739716606836,
+          "name": "stok of Safi",
+          "quantity": 39995,
+          "localisation": {
+            "city": "Safi",
+            "latitude": "0",
+            "longitude": "0"
+          }
+        }
+      ],
+      "editedBy": [
+        {
+          "warehousemanId": 1333,
+          "at": "2025-02-16"
+        }
+      ]
     }
   ],
   "warehousemans": [

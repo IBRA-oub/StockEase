@@ -1,50 +1,72 @@
-# Welcome to your Expo app 👋
+# 🏪 **Application de Gestion de Stock**
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+## 🚀 **Fonctionnalités**
 
-## Get started
+### 🔐 **Authentification**
+- 🔑 Connexion sécurisée avec un code secret personnel.
 
-1. Install dependencies
+### 📦 **Gestion des Produits**
+- 📸 Scanner de code-barres avec `expo-camera` pour une identification rapide.
+- ⌨️ Saisie manuelle en cas de dysfonctionnement du scanner.
+  - ✅ **Produit existant** :
+    - ➕ Ajout ou ➖ retrait des quantités en stock.
+    - 📃 Affichage des informations (nom, type, prix, quantité disponible...).
+  - 🆕 **Produit non existant** :
+    - 📄 Formulaire de création avec :
+      - 🏷️ Nom, 🏷️ Type, 💲 Prix, 🚛 Fournisseur...
+      - 📦 Quantité initiale avec entrepôt concerné.
+      - 🖼️ Ajout d'une image.
 
-   ```bash
-   npm install
-   ```
+### 📋 **Liste des Produits**
+- 📑 Affichage détaillé avec :
+  - 🏷️ Nom, 🏷️ Type, 💲 Prix, 📦 Quantité disponible...
+  - 📌 Indicateur d’état du stock :
+    - 🔴 Rouge : Stock épuisé.
+    - 🟡 Jaune : Faible stock (<10 unités).
+- ⚡ Actions disponibles :
+  - 🔼 **Réapprovisionner** pour augmenter la quantité.
+  - 🔽 **Décharger** pour retirer des unités.
 
-2. Start the app
+### 🔍 **Filtrage et Recherche**
+- 🔤 Recherche par **nom**.
+- 📊 Tri dynamique par **prix, nom alphabétique ou quantité**.
 
-   ```bash
-    npx expo start
-   ```
+### 📊 **Statistiques et Résumé des Stocks**
+- 📈 Tableau de bord avec :
+  - 📦 Nombre total de produits.
+  - 🏙️ Nombre total de villes.
+  - ⚠️ Produits en rupture de stock.
+  - 💰 Valeur totale des stocks.
+  - 🔄 Produits les plus ajoutés/retirés récemment.
 
-In the output, you'll find options to open the app in a
+### 📜 **Sauvegarde et Export des Données**
+- 🖨️ Exportation de rapports PDF avec `expo-print`.
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+## 🛠️ **Technologies Utilisées**
+- 📱 **Frontend Mobile** : React Native, Expo.
+- 🏗️ **Backend** : JSON Server pour la gestion des données.
+- 🔍 **Scanner** : `expo-camera` pour la lecture des codes-barres.
+- 🖨️ **Export PDF** : `expo-print` pour la génération de rapports.
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+## 📥 **Installation et Exécution du Projet**
 
-## Get a fresh project
-
-When you're ready, run:
-
+1️⃣ **Cloner le projet**
 ```bash
-npm run reset-project
-```
+git clone https://github.com/IBRA-oub/StockEase.git
+cd StockEase
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+2️⃣ **Installer les dépendances**
+```bash
+npm install
 
-## Learn more
+3️⃣ **Démarrer le JSON server**
+```bash
+npx json-server db.json
 
-To learn more about developing your project with Expo, look at the following resources:
+4️⃣ **Démarrer le frontend**
+```bash
+npx expo start
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+5️⃣ **Accéder à l'application**
+  - Scan the QR code with expo go or with your camera for IOS
+  - Ouvrir un navigateur et aller à : `http://localhost:8081`

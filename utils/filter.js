@@ -18,7 +18,11 @@
     if (filter === 'A-Z') {
         filteredData.sort((a, b) => a.name.localeCompare(b.name));
     } else if (filter === 'quantity') {
-        filteredData.sort((a, b) => a.stocks.quantity - b.stocks.quantity);
+        filteredData.sort((a, b) => {
+            const quantityA = a.stocks?.reduce((sum, stock) => sum + (stock.quantity || 0), 0);
+            const quantityB = b.stocks?.reduce((sum, stock) => sum + (stock.quantity || 0), 0);
+            return quantityA - quantityB;
+        });
     } else if (filter === 'priceAsc') {
         filteredData.sort((a, b) => a.price - b.price);
     } else if (filter === 'priceDesc') {

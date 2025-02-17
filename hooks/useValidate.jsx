@@ -58,7 +58,7 @@ export function useValidate() {
     }
 
     if (image.trim() === "") {
-      setErrors((prevState) => ({ ...prevState, image: "Image URL must start with https://" }))
+      setErrors((prevState) => ({ ...prevState, image: "Image URL is required" }))
       isFormValid = false
     }
 
